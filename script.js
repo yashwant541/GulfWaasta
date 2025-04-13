@@ -5,9 +5,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (mobileMenuBtn && mainNav) {
         mobileMenuBtn.addEventListener('click', function() {
-            mainNav.classList.toggle('active');
+            mainNav.classList.toggle('active'); // Toggle visibility of the nav
             mobileMenuBtn.innerHTML = mainNav.classList.contains('active') ? 
                 '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            
+            // Also toggle the navigation ul inside the mobile menu
+            const navLinks = document.querySelector('.nav ul');
+            if (navLinks) {
+                navLinks.classList.toggle('active'); // This will show the menu on mobile
+            }
         });
     }
     
@@ -17,8 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function() {
             if (window.innerWidth < 992) {
                 mainNav.classList.remove('active');
-                if (mobileMenuBtn) {
-                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                const navLinks = document.querySelector('.nav ul');
+                if (navLinks) {
+                    navLinks.classList.remove('active');
                 }
             }
         });
@@ -35,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
                 window.scrollTo({
-                    top: targetElement.offsetTop - 80,
+                    top: targetElement.offsetTop - 80,  // Adjust to account for fixed navbar
                     behavior: 'smooth'
                 });
             }
