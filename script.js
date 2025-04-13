@@ -17,7 +17,9 @@ document.addEventListener('DOMContentLoaded', function() {
         link.addEventListener('click', function() {
             if (window.innerWidth < 992) {
                 mainNav.classList.remove('active');
-                mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                if (mobileMenuBtn) {
+                    mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                }
             }
         });
     });
