@@ -45,21 +45,36 @@
     <form id="applicationForm">
       <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" required />
-
-          <label for="phone">Phone Number</label>
-          <input type="text" id="phone" required />
-
-          <label for="email">Email Address</label>
-          <input type="email" id="email" required />
-        </div>
+      <!-- Sign-up / Login Form -->
+      <div id="authSection">
+        <h3 id="authStatus">Please sign in to apply</h3>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" />
+        <button type="button" id="loginBtn">Log In</button>
+        <button type="button" id="signupBtn">Sign Up</button>
+        <button type="button" id="logoutBtn" style="display:none;">Log Out</button>
       </div>
 
-      <div class="form-group form-full" style="margin-top: 30px;">
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+      <!-- Application Form -->
+      <div id="applyFormSection" style="display:none;">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" required />
+
+            <label for="phone">Phone Number</label>
+            <input type="text" id="phone" required />
+
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required />
+          </div>
+        </div>
+
+        <div class="form-group form-full" style="margin-top: 30px;">
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+        </div>
       </div>
     </form>
   </section>
@@ -78,12 +93,75 @@
 
   <!-- Supabase Script -->
   <script>
+    // Initialize Supabase client
     const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-    document.getElementById("applicationForm").addEventListener("submit", async function(e) {
+    const authStatus = document.getElementById('authStatus');
+    const loginBtn = document.getElementById('loginBtn');
+    const signupBtn = document.getElementById('signupBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const applyFormSection = document.getElementById('applyFormSection');
+    const authSection = document.getElementById('authSection');
+    
+    // Listen for user session change
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        authStatus.innerText = 'You are logged in!';
+        loginBtn.style.display = 'none';
+        signupBtn.style.display = 'none';
+        authSection.style.display = 'none';
+        applyFormSection.style.display = 'block';
+        logoutBtn.style.display = 'inline-block';
+      } else {
+        authStatus.innerText = 'Please sign in to apply';
+        loginBtn.style.display = 'inline-block';
+        signupBtn.style.display = 'inline-block';
+        logoutBtn.style.display = 'none';
+        applyFormSection.style.display = 'none';
+        authSection.style.display = 'block';
+      }
+    });
+
+    // Sign Up Logic
+    signupBtn.addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { user, error } = await supabase.auth.signUp({ email, password });
+      
+      if (error) {
+        alert('Error: ' + error.message);
+      } else {
+        alert('Sign Up successful! Please check your email for verification.');
+      }
+    });
+
+    // Log In Logic
+    loginBtn.addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const { user, error } = await supabase.auth.signInWithPassword({ email, password });
+      
+      if (error) {
+        alert('Error: ' + error.message);
+      }
+    });
+
+    // Log Out Logic
+    logoutBtn.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+    });
+
+    // Form Submission Logic
+    document.getElementById("applicationForm").addEventListener("submit", async function (e) {
       e.preventDefault();
+
+      const user = supabase.auth.user(); // Ensure user is logged in
+      if (!user) {
+        alert('You must be logged in to submit the form.');
+        return;
+      }
 
       const name = document.getElementById("name").value.trim();
       const phone = document.getElementById("phone").value.trim();
