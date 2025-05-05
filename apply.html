@@ -6,10 +6,8 @@
     <title>Apply Now | Gulf Wasta</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <!-- Include Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* Additional styles for auth forms */
         .auth-container {
             display: flex;
             justify-content: center;
@@ -66,12 +64,10 @@
             color: #721c24;
         }
         
-        /* Ensure buttons are clickable */
         button:not(:disabled) {
             cursor: pointer;
         }
         
-        /* Form input styling */
         .form-group {
             margin-bottom: 1.5rem;
         }
@@ -106,30 +102,8 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">
-                <img src="images/logo.png" alt="Gulf Wasta Logo">
-                <h1>Gulf<span>Wasta</span></h1>
-            </div>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <nav id="mainNav">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html" class="active">About Us</a></li>
-                    <li><a href="clients.html">Clients</a></li>
-                    <li><a href="jobs.html">Jobs</a></li>
-                    <li><a href="apply.html">Apply</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Apply Hero -->
+    <!-- Your header content here -->
+    
     <section class="apply-hero" style="padding-top: 100px;">
         <div class="container">
             <h2>Apply Now</h2>
@@ -137,7 +111,6 @@
         </div>
     </section>
 
-    <!-- Auth Tabs -->
     <div class="container auth-container">
         <div class="auth-tab active" id="signInTab">Sign In</div>
         <div class="auth-tab" id="registerTab">Register</div>
@@ -206,7 +179,7 @@
         </form>
     </section>
 
-    <!-- Application Form (hidden until authenticated) -->
+    <!-- Application Form -->
     <section class="apply-form" id="applicationForm" style="display: none;">
         <form id="jobApplication">
             <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
@@ -215,13 +188,13 @@
                 <div class="form-group">
                     <label for="appName">Name</label>
                     <input type="text" id="appName" required>
+                </div>
+                
+                <div class="form-group">
                     <label for="appPhone">Phone Number</label>
                     <input type="text" id="appPhone" required>
                 </div>
-                <!-- More form fields... -->
             </div>
-            
-            <!-- More form sections... -->
             
             <div class="form-group form-full" style="margin-top: 30px;">
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
@@ -231,18 +204,7 @@
         </form>
     </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <!-- Footer columns... -->
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-            </div>
-        </div>
-    </footer>
+    <!-- Your footer content here -->
 
     <script>
         // Initialize Supabase
@@ -281,7 +243,6 @@
             const messageEl = document.getElementById('signInMessage');
             const submitBtn = e.target.querySelector('button[type="submit"]');
             
-            // Disable button during submission
             submitBtn.disabled = true;
             submitBtn.textContent = 'Signing in...';
             
@@ -293,22 +254,19 @@
                 
                 if (error) throw error;
                 
-                // Show success message
                 messageEl.textContent = 'Signed in successfully!';
                 messageEl.className = 'form-message success';
                 messageEl.style.display = 'block';
                 
-                // Hide auth forms and show application form
                 signInForm.style.display = 'none';
                 registerForm.style.display = 'none';
                 applicationForm.style.display = 'block';
                 
-                // Pre-fill application form with user data
-                const user = data.user;
+                // Pre-fill application form
                 const { data: profile } = await supabase
-                    .from('userbase')
+                    .from('profiles')
                     .select('*')
-                    .eq('id', user.id)
+                    .eq('id', data.user.id)
                     .single();
                 
                 if (profile) {
@@ -338,11 +296,9 @@
             const messageEl = document.getElementById('registerMessage');
             const submitBtn = e.target.querySelector('button[type="submit"]');
             
-            // Disable button during submission
             submitBtn.disabled = true;
             submitBtn.textContent = 'Registering...';
             
-            // Validate passwords match
             if (password !== confirmPassword) {
                 messageEl.textContent = 'Passwords do not match!';
                 messageEl.className = 'form-message error';
@@ -353,43 +309,27 @@
             }
             
             try {
-                // 1. Register the user with Supabase Auth
-                const { data: authData, error: authError } = await supabase.auth.signUp({
+                const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
                     options: {
                         data: {
-                            name: name,
-                            phone: phone
+                            name,
+                            mobile_number: phone
                         }
                     }
                 });
                 
-                if (authError) throw authError;
+                if (error) throw error;
                 
-                // 2. Insert user profile into the database
-                const { data: profileData, error: profileError } = await supabase
-                    .from('userbase')
-                    .insert([
-                        { 
-                            id: authData.user.id,
-                            name: name,
-                            mobile_number: phone,
-                            email: email
-                        }
-                    ]);
-                
-                if (profileError) throw profileError;
-                
-                // Show success message
-                messageEl.textContent = 'Registration successful! Please check your email to confirm your account.';
+                messageEl.textContent = 'Registration successful! Please check your email to verify your account.';
                 messageEl.className = 'form-message success';
                 messageEl.style.display = 'block';
                 
                 // Clear form
                 e.target.reset();
                 
-                // Switch to sign in tab after a delay
+                // Switch to sign in after delay
                 setTimeout(() => {
                     signInTab.click();
                 }, 2000);
@@ -413,21 +353,18 @@
             const messageEl = document.getElementById('applicationMessage');
             const submitBtn = e.target.querySelector('button[type="submit"]');
             
-            // Disable button during submission
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
             
             try {
-                // Get current user
                 const { data: { user } } = await supabase.auth.getUser();
                 
                 if (!user) throw new Error('Not authenticated');
                 
-                // Update user profile
-                const { data, error } = await supabase
-                    .from('userbase')
+                const { error } = await supabase
+                    .from('profiles')
                     .update({
-                        name: name,
+                        name,
                         mobile_number: phone,
                         updated_at: new Date()
                     })
@@ -435,7 +372,6 @@
                 
                 if (error) throw error;
                 
-                // Show success message
                 messageEl.textContent = 'Application submitted successfully!';
                 messageEl.className = 'form-message success';
                 messageEl.style.display = 'block';
@@ -455,14 +391,12 @@
             const { data: { user } } = await supabase.auth.getUser();
             
             if (user) {
-                // User is signed in
                 signInForm.style.display = 'none';
                 registerForm.style.display = 'none';
                 applicationForm.style.display = 'block';
                 
-                // Pre-fill application form with user data
                 const { data: profile } = await supabase
-                    .from('userbase')
+                    .from('profiles')
                     .select('*')
                     .eq('id', user.id)
                     .single();
@@ -474,7 +408,7 @@
             }
         }
         
-        // Run auth check when page loads
+        // Initialize
         document.addEventListener('DOMContentLoaded', checkAuth);
     </script>
 </body>
