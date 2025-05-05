@@ -8,8 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Header (same as index.html) -->
-    <!-- Header (same as index.html) -->
+    <!-- Header -->
     <header>
         <div class="container header-container">
             <div class="logo">
@@ -33,14 +32,7 @@
     </header>
 
     <!-- Apply Hero -->
-        <!-- Apply Hero -->
     <section class="apply-hero" style="padding-top: 100px;">
-        <div class="container">
-            <h2>Apply Now</h2>
-            <p>Start your application for one of our great job opportunities</p>
-        </div>
-    </section>
-    <section class="apply-hero">
         <div class="container">
             <h2>Apply Now</h2>
             <p>Start your application for one of our great job opportunities</p>
@@ -48,26 +40,30 @@
     </section>
 
     <!-- Apply Form -->
-    <section class="apply-form">
-        <form>
-            <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="name">Name</label>
-                    <input type="text" id="name" required>
-                    <label for="phone">Phone Number</label>
-                    <input type="text" id="phone" required>
+    <section class="apply-form" style="padding-top: 100px;">
+        <div class="container">
+            <form id="register-form">
+                <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required>
+
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" required>
+
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
                 </div>
-                <!-- More form fields... -->
-            </div>
-            
-            <!-- More form sections... -->
-            
-            <div class="form-group form-full" style="margin-top: 30px;">
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
-            </div>
-        </form>
+                
+                <div class="form-group form-full" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+                </div>
+                <p id="status" style="margin-top: 20px;"></p>
+            </form>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -82,6 +78,37 @@
             </div>
         </div>
     </footer>
+
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // Replace with your actual values
+        const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const mobile = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+
+            const { data, error } = await supabase
+                .from('userbase')
+                .insert([{ name, mobile_number: mobile, email }]);
+
+            const status = document.getElementById('status');
+            if (error) {
+                status.textContent = `❌ Error: ${error.message}`;
+                status.style.color = 'red';
+            } else {
+                status.textContent = `✅ Successfully registered!`;
+                status.style.color = 'green';
+                document.getElementById('register-form').reset();
+            }
+        });
+    </script>
 
     <script src="js/main.js"></script>
 </body>
