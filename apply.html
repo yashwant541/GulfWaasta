@@ -76,13 +76,11 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
-
   <!-- Supabase Script -->
   <script>
     const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     document.getElementById("applicationForm").addEventListener("submit", async function(e) {
       e.preventDefault();
