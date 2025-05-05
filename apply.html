@@ -1,62 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Apply Now | Gulf Wasta</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    .auth-container {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-    .auth-tab {
-      padding: 1rem 2rem;
-      background: #f5f5f5;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .auth-tab.active {
-      background: #007bff;
-      color: white;
-    }
-    .auth-form {
-      display: none;
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    .auth-form.active {
-      display: block;
-    }
-    .form-message {
-      margin-top: 1rem;
-      padding: 0.5rem;
-      border-radius: 4px;
-      display: none;
-    }
-    .success {
-      background: #d4edda;
-      color: #155724;
-    }
-    .error {
-      background: #f8d7da;
-      color: #721c24;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Now | Gulf Wasta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Include Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Additional styles for auth forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-tab {
+            padding: 1rem 2rem;
+            background: #f5f5f5;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab:hover {
+            background: #e0e0e0;
+        }
+        
+        .auth-tab.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-message {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Ensure buttons are clickable */
+        button:not(:disabled) {
+            cursor: pointer;
+        }
+        
+        /* Form input styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+    </style>
 </head>
 <body>
-
-
-      <!-- Header -->
+    <!-- Header -->
     <header>
         <div class="container header-container">
             <div class="logo">
@@ -87,183 +137,345 @@
         </div>
     </section>
 
-  <!-- HEADER and NAV skipped for brevity -->
+    <!-- Auth Tabs -->
+    <div class="container auth-container">
+        <div class="auth-tab active" id="signInTab">Sign In</div>
+        <div class="auth-tab" id="registerTab">Register</div>
+    </div>
 
-  <div class="container auth-container">
-    <div class="auth-tab active" id="signInTab">Sign In</div>
-    <div class="auth-tab" id="registerTab">Register</div>
-  </div>
+    <!-- Sign In Form -->
+    <section class="auth-form active" id="signInForm">
+        <form id="signIn">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Sign In</h2>
+            
+            <div class="form-group">
+                <label for="signInEmail">Email</label>
+                <input type="email" id="signInEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="signInPassword">Password</label>
+                <input type="password" id="signInPassword" required>
+            </div>
+            
+            <div class="form-group form-full" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+            </div>
+            
+            <div id="signInMessage" class="form-message"></div>
+        </form>
+    </section>
 
-  <!-- Sign In -->
-  <section class="auth-form active" id="signInForm">
-    <form id="signIn">
-      <h2>Sign In</h2>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="signInEmail" required />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="signInPassword" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Sign In</button>
-      <div id="signInMessage" class="form-message"></div>
-    </form>
-  </section>
+    <!-- Register Form -->
+    <section class="auth-form" id="registerForm">
+        <form id="register">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Register</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="registerName">Full Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPhone">Mobile Number</label>
+                    <input type="tel" id="registerPhone" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" required>
+            </div>
+            
+            <div class="form-group form-full" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+            </div>
+            
+            <div id="registerMessage" class="form-message"></div>
+        </form>
+    </section>
 
-  <!-- Register -->
-  <section class="auth-form" id="registerForm">
-    <form id="register">
-      <h2>Register</h2>
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="registerName" required />
-      </div>
-      <div class="form-group">
-        <label>Mobile Number</label>
-        <input type="tel" id="registerPhone" required />
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="registerEmail" required />
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="registerPassword" required />
-      </div>
-      <div class="form-group">
-        <label>Confirm Password</label>
-        <input type="password" id="confirmPassword" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Register</button>
-      <div id="registerMessage" class="form-message"></div>
-    </form>
-  </section>
+    <!-- Application Form (hidden until authenticated) -->
+    <section class="apply-form" id="applicationForm" style="display: none;">
+        <form id="jobApplication">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="appName">Name</label>
+                    <input type="text" id="appName" required>
+                    <label for="appPhone">Phone Number</label>
+                    <input type="text" id="appPhone" required>
+                </div>
+                <!-- More form fields... -->
+            </div>
+            
+            <!-- More form sections... -->
+            
+            <div class="form-group form-full" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+            </div>
+            
+            <div id="applicationMessage" class="form-message"></div>
+        </form>
+    </section>
 
-  <!-- Application Form -->
-  <section class="apply-form" id="applicationForm" style="display: none;">
-    <form id="jobApplication">
-      <h2>Job Application</h2>
-      <div class="form-group">
-        <label>Name</label>
-        <input type="text" id="appName" required />
-      </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="text" id="appPhone" required />
-      </div>
-      <button type="submit" class="btn btn-primary">Submit Application</button>
-      <div id="applicationMessage" class="form-message"></div>
-    </form>
-  </section>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Footer columns... -->
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
 
-  <script>
-    // Supabase Config
-    const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
-    const supabaseKey = 'YOUR_PUBLIC_ANON_KEY'; // REPLACE with your actual key
-    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-    // Tab logic
-    const signInTab = document.getElementById("signInTab");
-    const registerTab = document.getElementById("registerTab");
-    const signInForm = document.getElementById("signInForm");
-    const registerForm = document.getElementById("registerForm");
-    const applicationForm = document.getElementById("applicationForm");
-
-    signInTab.addEventListener("click", () => {
-      signInTab.classList.add("active");
-      registerTab.classList.remove("active");
-      signInForm.classList.add("active");
-      registerForm.classList.remove("active");
-    });
-
-    registerTab.addEventListener("click", () => {
-      registerTab.classList.add("active");
-      signInTab.classList.remove("active");
-      registerForm.classList.add("active");
-      signInForm.classList.remove("active");
-    });
-
-    // Sign In
-    document.getElementById("signIn").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const email = document.getElementById("signInEmail").value;
-      const password = document.getElementById("signInPassword").value;
-      const messageEl = document.getElementById("signInMessage");
-
-      try {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-
-        messageEl.textContent = "Signed in successfully!";
-        messageEl.className = "form-message success";
-        messageEl.style.display = "block";
-
-        signInForm.style.display = "none";
-        registerForm.style.display = "none";
-        applicationForm.style.display = "block";
-
-        // Load profile info
-        const { data: profile } = await supabase.from("userbase").select("*").eq("id", data.user.id).single();
-        if (profile) {
-          document.getElementById("appName").value = profile.name || "";
-          document.getElementById("appPhone").value = profile.mobile_number || "";
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // DOM Elements
+        const signInTab = document.getElementById('signInTab');
+        const registerTab = document.getElementById('registerTab');
+        const signInForm = document.getElementById('signInForm');
+        const registerForm = document.getElementById('registerForm');
+        const applicationForm = document.getElementById('applicationForm');
+        
+        // Tab switching
+        signInTab.addEventListener('click', () => {
+            signInTab.classList.add('active');
+            registerTab.classList.remove('active');
+            signInForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+        
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            signInTab.classList.remove('active');
+            registerForm.classList.add('active');
+            signInForm.classList.remove('active');
+        });
+        
+        // Sign In Form Submission
+        document.getElementById('signIn').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signInEmail').value;
+            const password = document.getElementById('signInPassword').value;
+            const messageEl = document.getElementById('signInMessage');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing in...';
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                // Show success message
+                messageEl.textContent = 'Signed in successfully!';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+                // Hide auth forms and show application form
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
+                
+                // Pre-fill application form with user data
+                const user = data.user;
+                const { data: profile } = await supabase
+                    .from('userbase')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
+                }
+                
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+            }
+        });
+        
+        // Register Form Submission
+        document.getElementById('register').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const phone = document.getElementById('registerPhone').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageEl = document.getElementById('registerMessage');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Registering...';
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                messageEl.textContent = 'Passwords do not match!';
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register';
+                return;
+            }
+            
+            try {
+                // 1. Register the user with Supabase Auth
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            name: name,
+                            phone: phone
+                        }
+                    }
+                });
+                
+                if (authError) throw authError;
+                
+                // 2. Insert user profile into the database
+                const { data: profileData, error: profileError } = await supabase
+                    .from('userbase')
+                    .insert([
+                        { 
+                            id: authData.user.id,
+                            name: name,
+                            mobile_number: phone,
+                            email: email
+                        }
+                    ]);
+                
+                if (profileError) throw profileError;
+                
+                // Show success message
+                messageEl.textContent = 'Registration successful! Please check your email to confirm your account.';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+                // Clear form
+                e.target.reset();
+                
+                // Switch to sign in tab after a delay
+                setTimeout(() => {
+                    signInTab.click();
+                }, 2000);
+                
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Register';
+            }
+        });
+        
+        // Job Application Form Submission
+        document.getElementById('jobApplication').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('appName').value;
+            const phone = document.getElementById('appPhone').value;
+            const messageEl = document.getElementById('applicationMessage');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            // Disable button during submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
+            try {
+                // Get current user
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (!user) throw new Error('Not authenticated');
+                
+                // Update user profile
+                const { data, error } = await supabase
+                    .from('userbase')
+                    .update({
+                        name: name,
+                        mobile_number: phone,
+                        updated_at: new Date()
+                    })
+                    .eq('id', user.id);
+                
+                if (error) throw error;
+                
+                // Show success message
+                messageEl.textContent = 'Application submitted successfully!';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Application';
+            }
+        });
+        
+        // Check if user is already signed in
+        async function checkAuth() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                // User is signed in
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
+                
+                // Pre-fill application form with user data
+                const { data: profile } = await supabase
+                    .from('userbase')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
+                }
+            }
         }
-
-      } catch (error) {
-        messageEl.textContent = error.message;
-        messageEl.className = "form-message error";
-        messageEl.style.display = "block";
-      }
-    });
-
-    // Register
-    document.getElementById("register").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const name = document.getElementById("registerName").value;
-      const phone = document.getElementById("registerPhone").value;
-      const email = document.getElementById("registerEmail").value;
-      const password = document.getElementById("registerPassword").value;
-      const confirm = document.getElementById("confirmPassword").value;
-      const messageEl = document.getElementById("registerMessage");
-
-      if (password !== confirm) {
-        messageEl.textContent = "Passwords do not match.";
-        messageEl.className = "form-message error";
-        messageEl.style.display = "block";
-        return;
-      }
-
-      try {
-        const { data, error } = await supabase.auth.signUp({ email, password });
-        if (error) throw error;
-
-        // Save profile
-        const { error: profileError } = await supabase.from("userbase").insert([
-          {
-            id: data.user.id,
-            name: name,
-            mobile_number: phone,
-          },
-        ]);
-        if (profileError) throw profileError;
-
-        messageEl.textContent = "Registered successfully!";
-        messageEl.className = "form-message success";
-        messageEl.style.display = "block";
-
-        registerForm.reset();
-        registerForm.style.display = "none";
-        signInForm.style.display = "block";
-        signInTab.classList.add("active");
-        registerTab.classList.remove("active");
-
-      } catch (error) {
-        messageEl.textContent = error.message;
-        messageEl.className = "form-message error";
-        messageEl.style.display = "block";
-      }
-    });
-  </script>
+        
+        // Run auth check when page loads
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
 </body>
 </html>
