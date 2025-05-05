@@ -134,6 +134,11 @@
         alert('Error: ' + error.message);
       } else {
         alert('Sign Up successful! Please check your email for verification.');
+        authStatus.innerText = 'You are signed up. Please check your email to verify your account.';
+        // Optionally redirect to login page after signup
+        setTimeout(() => {
+          window.location.href = 'login.html'; // Or redirect to the login section
+        }, 3000);
       }
     });
 
