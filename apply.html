@@ -1,115 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apply Now | Gulf Wasta</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply Now | Gulf Wasta</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">
-                <img src="images/logo.png" alt="Gulf Wasta Logo">
-                <h1>Gulf<span>Wasta</span></h1>
-            </div>
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <i class="fas fa-bars"></i>
-            </button>
-            <nav id="mainNav">
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="about.html" class="active">About Us</a></li>
-                    <li><a href="clients.html">Clients</a></li>
-                    <li><a href="jobs.html">Jobs</a></li>
-                    <li><a href="apply.html">Apply</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </nav>
+  <!-- Header -->
+  <header>
+    <div class="container header-container">
+      <div class="logo">
+        <img src="images/logo.png" alt="Gulf Wasta Logo" />
+        <h1>Gulf<span>Wasta</span></h1>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <i class="fas fa-bars"></i>
+      </button>
+      <nav id="mainNav">
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html" class="active">About Us</a></li>
+          <li><a href="clients.html">Clients</a></li>
+          <li><a href="jobs.html">Jobs</a></li>
+          <li><a href="apply.html">Apply</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Apply Hero -->
+  <section class="apply-hero" style="padding-top: 100px;">
+    <div class="container">
+      <h2>Apply Now</h2>
+      <p>Start your application for one of our great job opportunities</p>
+    </div>
+  </section>
+
+  <!-- Apply Form -->
+  <section class="apply-form">
+    <form id="applicationForm">
+      <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" required />
+
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" required />
+
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required />
         </div>
-    </header>
+      </div>
 
-    <!-- Apply Hero -->
-    <section class="apply-hero" style="padding-top: 100px;">
-        <div class="container">
-            <h2>Apply Now</h2>
-            <p>Start your application for one of our great job opportunities</p>
-        </div>
-    </section>
+      <div class="form-group form-full" style="margin-top: 30px;">
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+      </div>
+    </form>
+  </section>
 
-    <!-- Apply Form -->
-    <section class="apply-form" style="padding-top: 100px;">
-        <div class="container">
-            <form id="register-form">
-                <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
-                
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" required>
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Footer columns... -->
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+      </div>
+    </div>
+  </footer>
 
-                        <label for="phone">Phone Number</label>
-                        <input type="text" id="phone" required>
+  <script src="js/main.js"></script>
 
-                        <label for="email">Email</label>
-                        <input type="email" id="email" required>
-                    </div>
-                </div>
-                
-                <div class="form-group form-full" style="margin-top: 30px;">
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
-                </div>
-                <p id="status" style="margin-top: 20px;"></p>
-            </form>
-        </div>
-    </section>
+  <!-- Supabase Script -->
+  <script>
+    const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
+    const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-grid">
-                <!-- Footer columns... -->
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-            </div>
-        </div>
-    </footer>
+    document.getElementById("applicationForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
 
-    <!-- Supabase JS CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        // Replace with your actual values
-        const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+      const name = document.getElementById("name").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const email = document.getElementById("email").value.trim();
 
-        document.getElementById('register-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
+      const { data, error } = await supabase
+        .from("userbase")
+        .insert([{ name: name, mobile_number: phone, email: email }]);
 
-            const name = document.getElementById('name').value;
-            const mobile = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-
-            const { data, error } = await supabase
-                .from('userbase')
-                .insert([{ name, mobile_number: mobile, email }]);
-
-            const status = document.getElementById('status');
-            if (error) {
-                status.textContent = `❌ Error: ${error.message}`;
-                status.style.color = 'red';
-            } else {
-                status.textContent = `✅ Successfully registered!`;
-                status.style.color = 'green';
-                document.getElementById('register-form').reset();
-            }
-        });
-    </script>
-
-    <script src="js/main.js"></script>
+      if (error) {
+        alert("Submission failed: " + error.message);
+      } else {
+        alert("Application submitted successfully!");
+        document.getElementById("applicationForm").reset();
+      }
+    });
+  </script>
 </body>
 </html>
