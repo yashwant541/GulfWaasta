@@ -103,7 +103,28 @@
 </head>
 <body>
     <!-- Your header content here -->
-    
+        <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="images/logo.png" alt="Gulf Wasta Logo">
+                <h1>Gulf<span>Wasta</span></h1>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html" class="active">About Us</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="apply.html">Apply</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
     <section class="apply-hero" style="padding-top: 100px;">
         <div class="container">
             <h2>Apply Now</h2>
@@ -205,7 +226,18 @@
     </section>
 
     <!-- Your footer content here -->
-
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Footer columns... -->
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+    
     <script>
         // Initialize Supabase
         const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
@@ -309,6 +341,9 @@
             }
             
             try {
+                // Get the current URL without any hash or query parameters
+                const redirectTo = `${window.location.origin}${window.location.pathname}`;
+                
                 const { data, error } = await supabase.auth.signUp({
                     email,
                     password,
@@ -316,7 +351,8 @@
                         data: {
                             name,
                             mobile_number: phone
-                        }
+                        },
+                        emailRedirectTo: redirectTo
                     }
                 });
                 
@@ -408,8 +444,36 @@
             }
         }
         
+        // Handle auth redirect after email confirmation
+        async function handleAuthRedirect() {
+            const { data, error } = await supabase.auth.getSessionFromUrl({
+                url: window.location.href
+            });
+            
+            if (data?.session) {
+                // User just confirmed their email
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
+                
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', data.session.user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
+                }
+            }
+        }
+        
         // Initialize
-        document.addEventListener('DOMContentLoaded', checkAuth);
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            handleAuthRedirect();
+        });
     </script>
 </body>
 </html>
