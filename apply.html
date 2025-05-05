@@ -130,7 +130,7 @@
     </header>
 
     <!-- Apply Hero -->
-    <section class="apply-hero" style="padding-top: 100px;">
+    <section class="apply-hero">
         <div class="container">
             <h2>Apply Now</h2>
             <p>Start your application for one of our great job opportunities</p>
@@ -243,12 +243,12 @@
             </div>
         </div>
     </footer>
-</body>
-<script>
+
+    <script>
         // Initialize Supabase
         const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         
         // DOM Elements
         const signInTab = document.getElementById('signInTab');
@@ -476,5 +476,6 @@
         
         // Run auth check when page loads
         document.addEventListener('DOMContentLoaded', checkAuth);
-</script>
+    </script>
+</body>
 </html>
