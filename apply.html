@@ -103,27 +103,6 @@
 </head>
 <body>
     <!-- Your header content here -->
-    <header>
-    <div class="container header-container">
-      <div class="logo">
-        <img src="images/logo.png" alt="Gulf Wasta Logo" />
-        <h1>Gulf<span>Wasta</span></h1>
-      </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">
-        <i class="fas fa-bars"></i>
-      </button>
-      <nav id="mainNav">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html" class="active">About Us</a></li>
-          <li><a href="clients.html">Clients</a></li>
-          <li><a href="jobs.html">Jobs</a></li>
-          <li><a href="apply.html">Apply</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
     
     <section class="apply-hero" style="padding-top: 100px;">
         <div class="container">
@@ -225,21 +204,10 @@
         </form>
     </section>
 
-      <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <!-- Footer columns... -->
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-      </div>
-    </div>
-  </footer>
-
+    <!-- Your footer content here -->
 
     <script>
-        // Initialize Supabase with your production URL
+        // Initialize Supabase
         const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
@@ -286,17 +254,30 @@
                 
                 if (error) throw error;
                 
-                showMessage(messageEl, 'Signed in successfully!', 'success');
+                messageEl.textContent = 'Signed in successfully!';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
                 
                 signInForm.style.display = 'none';
                 registerForm.style.display = 'none';
                 applicationForm.style.display = 'block';
                 
                 // Pre-fill application form
-                await loadUserProfile(data.user.id);
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
+                }
                 
             } catch (error) {
-                showMessage(messageEl, error.message, 'error');
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Sign In';
@@ -319,13 +300,16 @@
             submitBtn.textContent = 'Registering...';
             
             if (password !== confirmPassword) {
-                showMessage(messageEl, 'Passwords do not match!', 'error');
+                messageEl.textContent = 'Passwords do not match!';
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Register';
                 return;
             }
             
             try {
+                // Get the current URL without any hash or query parameters
                 const redirectTo = `${window.location.origin}${window.location.pathname}`;
                 
                 const { data, error } = await supabase.auth.signUp({
@@ -342,7 +326,11 @@
                 
                 if (error) throw error;
                 
-                showMessage(messageEl, 'Registration successful! Please check your email to verify your account.', 'success');
+                messageEl.textContent = 'Registration successful! Please check your email to verify your account.';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+                // Clear form
                 e.target.reset();
                 
                 // Switch to sign in after delay
@@ -351,10 +339,9 @@
                 }, 2000);
                 
             } catch (error) {
-                const errorMsg = error.message.includes('already registered') 
-                    ? 'This email is already registered. Please sign in.'
-                    : error.message;
-                showMessage(messageEl, errorMsg, 'error');
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Register';
@@ -389,71 +376,64 @@
                 
                 if (error) throw error;
                 
-                showMessage(messageEl, 'Application submitted successfully!', 'success');
+                messageEl.textContent = 'Application submitted successfully!';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
                 
             } catch (error) {
-                showMessage(messageEl, error.message, 'error');
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Application';
             }
         });
         
-        // Helper Functions
-        async function loadUserProfile(userId) {
-            const { data: profile, error } = await supabase
-                .from('profiles')
-                .select('*')
-                .eq('id', userId)
-                .single();
-            
-            if (!error && profile) {
-                document.getElementById('appName').value = profile.name || '';
-                document.getElementById('appPhone').value = profile.mobile_number || '';
-            }
-        }
-        
-        function showMessage(element, message, type) {
-            element.textContent = message;
-            element.className = `form-message ${type}`;
-            element.style.display = 'block';
-            
-            // Auto-hide after 5 seconds
-            if (type === 'success') {
-                setTimeout(() => {
-                    element.style.display = 'none';
-                }, 5000);
-            }
-        }
-        
-        // Check authentication state on page load
+        // Check if user is already signed in
         async function checkAuth() {
-            try {
-                const { data: { user } } = await supabase.auth.getUser();
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
                 
-                if (user) {
-                    signInForm.style.display = 'none';
-                    registerForm.style.display = 'none';
-                    applicationForm.style.display = 'block';
-                    await loadUserProfile(user.id);
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
                 }
-            } catch (error) {
-                console.error('Auth check error:', error);
             }
         }
         
-        // Handle email confirmation redirect
+        // Handle auth redirect after email confirmation
         async function handleAuthRedirect() {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    signInForm.style.display = 'none';
-                    registerForm.style.display = 'none';
-                    applicationForm.style.display = 'block';
-                    await loadUserProfile(session.user.id);
+            const { data, error } = await supabase.auth.getSessionFromUrl({
+                url: window.location.href
+            });
+            
+            if (data?.session) {
+                // User just confirmed their email
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
+                
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', data.session.user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
                 }
-            } catch (error) {
-                console.error('Auth redirect error:', error);
             }
         }
         
