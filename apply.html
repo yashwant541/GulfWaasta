@@ -1,188 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Apply Now | Gulf Wasta</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link rel="stylesheet" href="css/style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Now | Gulf Wasta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Include Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Additional styles for auth forms */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .auth-tab {
+            padding: 1rem 2rem;
+            background: #f5f5f5;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .auth-tab.active {
+            background: #007bff;
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-message {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 4px;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header>
-    <div class="container header-container">
-      <div class="logo">
-        <img src="images/logo.png" alt="Gulf Wasta Logo" />
-        <h1>Gulf<span>Wasta</span></h1>
-      </div>
-      <button class="mobile-menu-btn" id="mobileMenuBtn">
-        <i class="fas fa-bars"></i>
-      </button>
-      <nav id="mainNav">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html" class="active">About Us</a></li>
-          <li><a href="clients.html">Clients</a></li>
-          <li><a href="jobs.html">Jobs</a></li>
-          <li><a href="apply.html">Apply</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Apply Hero -->
-  <section class="apply-hero" style="padding-top: 100px;">
-    <div class="container">
-      <h2>Apply Now</h2>
-      <p>Start your application for one of our great job opportunities</p>
-    </div>
-  </section>
-
-  <!-- Apply Form -->
-  <section class="apply-form">
-    <form id="applicationForm">
-      <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
-
-      <!-- Sign-up / Login Form -->
-      <div id="authSection">
-        <h3 id="authStatus">Please sign in to apply</h3>
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Enter your email" />
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password" />
-        <button type="button" id="loginBtn">Log In</button>
-        <button type="button" id="signupBtn">Sign Up</button>
-        <button type="button" id="logoutBtn" style="display:none;">Log Out</button>
-      </div>
-
-      <!-- Application Form -->
-      <div id="applyFormSection" style="display:none;">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" required />
-
-            <label for="phone">Phone Number</label>
-            <input type="text" id="phone" required />
-
-            <label for="email">Email Address</label>
-            <input type="email" id="email" required />
-          </div>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="images/logo.png" alt="Gulf Wasta Logo">
+                <h1>Gulf<span>Wasta</span></h1>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html" class="active">About Us</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="apply.html">Apply</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
         </div>
+    </header>
 
-        <div class="form-group form-full" style="margin-top: 30px;">
-          <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+    <!-- Apply Hero -->
+    <section class="apply-hero">
+        <div class="container">
+            <h2>Apply Now</h2>
+            <p>Start your application for one of our great job opportunities</p>
         </div>
-      </div>
-    </form>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer>
-    <div class="container">
-      <div class="footer-grid">
-        <!-- Footer columns... -->
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
-      </div>
+    <!-- Auth Tabs -->
+    <div class="container auth-container">
+        <div class="auth-tab active" id="signInTab">Sign In</div>
+        <div class="auth-tab" id="registerTab">Register</div>
     </div>
-  </footer>
 
-  <!-- Supabase Script -->
-  <script>
-    // Initialize Supabase client
-    const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    <!-- Sign In Form -->
+    <section class="auth-form active" id="signInForm">
+        <form id="signIn">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Sign In</h2>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="signInEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="signInPassword" required>
+            </div>
+            
+            <div class="form-group form-full" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+            </div>
+            
+            <div id="signInMessage" class="form-message"></div>
+        </form>
+    </section>
 
-    const authStatus = document.getElementById('authStatus');
-    const loginBtn = document.getElementById('loginBtn');
-    const signupBtn = document.getElementById('signupBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
-    const applyFormSection = document.getElementById('applyFormSection');
-    const authSection = document.getElementById('authSection');
-    
-    // Listen for user session change
-    supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        authStatus.innerText = 'You are logged in!';
-        loginBtn.style.display = 'none';
-        signupBtn.style.display = 'none';
-        authSection.style.display = 'none';
-        applyFormSection.style.display = 'block';
-        logoutBtn.style.display = 'inline-block';
-      } else {
-        authStatus.innerText = 'Please sign in to apply';
-        loginBtn.style.display = 'inline-block';
-        signupBtn.style.display = 'inline-block';
-        logoutBtn.style.display = 'none';
-        applyFormSection.style.display = 'none';
-        authSection.style.display = 'block';
-      }
-    });
+    <!-- Register Form -->
+    <section class="auth-form" id="registerForm">
+        <form id="register">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Register</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Mobile Number</label>
+                    <input type="tel" id="registerPhone" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="registerEmail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="registerPassword" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" required>
+            </div>
+            
+            <div class="form-group form-full" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Register</button>
+            </div>
+            
+            <div id="registerMessage" class="form-message"></div>
+        </form>
+    </section>
 
-    // Sign Up Logic
-    signupBtn.addEventListener('click', async () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { user, error } = await supabase.auth.signUp({ email, password });
-      
-      if (error) {
-        alert('Error: ' + error.message);
-      } else {
-        alert('Sign Up successful! Please check your email for verification.');
-        authStatus.innerText = 'You are signed up. Please check your email to verify your account.';
-        // Optionally redirect to login page after signup
-        setTimeout(() => {
-          window.location.href = 'login.html'; // Or redirect to the login section
-        }, 3000);
-      }
-    });
+    <!-- Application Form (hidden until authenticated) -->
+    <section class="apply-form" id="applicationForm" style="display: none;">
+        <form id="jobApplication">
+            <h2 style="margin-bottom: 30px; font-size: 2rem;">Job Application</h2>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="appName" required>
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="appPhone" required>
+                </div>
+                <!-- More form fields... -->
+            </div>
+            
+            <!-- More form sections... -->
+            
+            <div class="form-group form-full" style="margin-top: 30px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Application</button>
+            </div>
+            
+            <div id="applicationMessage" class="form-message"></div>
+        </form>
+    </section>
 
-    // Log In Logic
-    loginBtn.addEventListener('click', async () => {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const { user, error } = await supabase.auth.signInWithPassword({ email, password });
-      
-      if (error) {
-        alert('Error: ' + error.message);
-      }
-    });
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Footer columns... -->
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
 
-    // Log Out Logic
-    logoutBtn.addEventListener('click', async () => {
-      await supabase.auth.signOut();
-    });
-
-    // Form Submission Logic
-    document.getElementById("applicationForm").addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      const user = supabase.auth.user(); // Ensure user is logged in
-      if (!user) {
-        alert('You must be logged in to submit the form.');
-        return;
-      }
-
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
-
-      const { data, error } = await supabase
-        .from("userbase")
-        .insert([{ name: name, mobile_number: phone, email: email }]);
-
-      if (error) {
-        alert("Submission failed: " + error.message);
-      } else {
-        alert("Application submitted successfully!");
-        document.getElementById("applicationForm").reset();
-      }
-    });
-  </script>
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // DOM Elements
+        const signInTab = document.getElementById('signInTab');
+        const registerTab = document.getElementById('registerTab');
+        const signInForm = document.getElementById('signInForm');
+        const registerForm = document.getElementById('registerForm');
+        const applicationForm = document.getElementById('applicationForm');
+        
+        // Tab switching
+        signInTab.addEventListener('click', () => {
+            signInTab.classList.add('active');
+            registerTab.classList.remove('active');
+            signInForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+        
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            signInTab.classList.remove('active');
+            registerForm.classList.add('active');
+            signInForm.classList.remove('active');
+        });
+        
+        // Sign In Form Submission
+        document.getElementById('signIn').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('signInEmail').value;
+            const password = document.getElementById('signInPassword').value;
+            const messageEl = document.getElementById('signInMessage');
+            
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                // Show success message
+                messageEl.textContent = 'Signed in successfully!';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+                // Hide auth forms and show application form
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
+                
+                // Pre-fill application form with user data
+                const user = data.user;
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
+                }
+                
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+            }
+        });
+        
+        // Register Form Submission
+        document.getElementById('register').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const phone = document.getElementById('registerPhone').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const messageEl = document.getElementById('registerMessage');
+            
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                messageEl.textContent = 'Passwords do not match!';
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+                return;
+            }
+            
+            try {
+                // 1. Register the user with Supabase Auth
+                const { data: authData, error: authError } = await supabase.auth.signUp({
+                    email,
+                    password
+                });
+                
+                if (authError) throw authError;
+                
+                // 2. Insert user profile into the database
+                const { data: profileData, error: profileError } = await supabase
+                    .from('profiles')
+                    .insert([
+                        { 
+                            id: authData.user.id,
+                            name: name,
+                            mobile_number: phone,
+                            email: email
+                        }
+                    ]);
+                
+                if (profileError) throw profileError;
+                
+                // Show success message
+                messageEl.textContent = 'Registration successful! Please check your email to confirm your account.';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+                // Clear form
+                document.getElementById('register').reset();
+                
+                // Switch to sign in tab
+                signInTab.click();
+                
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+            }
+        });
+        
+        // Job Application Form Submission
+        document.getElementById('jobApplication').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('appName').value;
+            const phone = document.getElementById('appPhone').value;
+            const messageEl = document.getElementById('applicationMessage');
+            
+            try {
+                // Get current user
+                const { data: { user } } = await supabase.auth.getUser();
+                
+                if (!user) throw new Error('Not authenticated');
+                
+                // Update user profile
+                const { data, error } = await supabase
+                    .from('profiles')
+                    .update({
+                        name: name,
+                        mobile_number: phone,
+                        updated_at: new Date()
+                    })
+                    .eq('id', user.id);
+                
+                if (error) throw error;
+                
+                // Show success message
+                messageEl.textContent = 'Application submitted successfully!';
+                messageEl.className = 'form-message success';
+                messageEl.style.display = 'block';
+                
+            } catch (error) {
+                messageEl.textContent = error.message;
+                messageEl.className = 'form-message error';
+                messageEl.style.display = 'block';
+            }
+        });
+        
+        // Check if user is already signed in
+        async function checkAuth() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                // User is signed in
+                signInForm.style.display = 'none';
+                registerForm.style.display = 'none';
+                applicationForm.style.display = 'block';
+                
+                // Pre-fill application form with user data
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile) {
+                    document.getElementById('appName').value = profile.name || '';
+                    document.getElementById('appPhone').value = profile.mobile_number || '';
+                }
+            }
+        }
+        
+        // Run auth check when page loads
+        checkAuth();
+    </script>
 </body>
 </html>
