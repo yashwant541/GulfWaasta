@@ -277,11 +277,52 @@
     </style>
 </head>
 <body>
-    <!-- Same header as dashboard.html -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="images/logo.png" alt="Gulf Wasta Logo" />
+                <h1>Gulf<span>Wasta</span></h1>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="apply.html">Apply</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
     
     <div class="dashboard-container">
         <div class="dashboard-grid">
-            <!-- Same sidebar as dashboard.html with resume builder active -->
+            <div class="dashboard-sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-info">
+                        <h3 id="sidebarUserName">User Name</h3>
+                        <p id="userEmail">user@example.com</p>
+                    </div>
+                </div>
+                
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="#interview-prep"><i class="fas fa-graduation-cap"></i> Interview Prep</a></li>
+                    <li><a href="#mock-tests"><i class="fas fa-clipboard-check"></i> Mock Tests</a></li>
+                    <li><a href="#resume-builder"><i class="fas fa-file-alt"></i> Resume Builder</a></li>
+                    <li><a href="#subscription"><i class="fas fa-crown"></i> Subscription</a></li>
+                    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+        </div>
             
             <div class="dashboard-main">
                 <div class="dashboard-card">
@@ -315,7 +356,16 @@
             </div>
         </div>
     </div>
-    
+        <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Footer columns... -->
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
     
 </body>
 </html>
