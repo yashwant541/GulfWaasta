@@ -285,7 +285,12 @@
                     password
                 });
                 
-                if (error) throw error;
+                if (error) {
+                  errorMessage.textContent = error.message;
+                } else {
+                  // Login successful
+                  window.location.href = "dashboard.html"; // Redirect to dashboard
+                }
                 
                 messageEl.textContent = 'Signed in successfully!';
                 messageEl.className = 'form-message success';
