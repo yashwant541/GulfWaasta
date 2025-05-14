@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | Gulf Wasta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        /* Consistent with your register page styles */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .welcome-banner {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 2rem;
+        }
+        
+        .dashboard-sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+        
+        .dashboard-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .dashboard-sidebar li {
+            margin-bottom: 1rem;
+        }
+        
+        .dashboard-sidebar a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 4px;
+            color: #333;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-sidebar a:hover, .dashboard-sidebar a.active {
+            background: #f0f7ff;
+            color: #007bff;
+        }
+        
+        .dashboard-main {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .dashboard-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .dashboard-card h3 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: #333;
+        }
+        
+        .program-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .program-card:hover {
+            border-color: #007bff;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.1);
+        }
+        
+        .program-card h4 {
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .program-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #0069d9;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #007bff;
+            color: #007bff;
+        }
+        
+        .btn-outline:hover {
+            background: #f0f7ff;
+        }
+        
+        .plans-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .plan-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .plan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .plan-card.popular {
+            border: 2px solid #007bff;
+            position: relative;
+        }
+        
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #007bff;
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .plan-card h4 {
+            font-size: 1.5rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+            color: #007bff;
+        }
+        
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        
+        .plan-features li {
+            margin-bottom: 0.75rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .plan-features li:before {
+            content: "\f00c";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: #28a745;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #007bff;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        .user-info h3 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+        
+        .user-info p {
+            margin: 0.25rem 0 0;
+            color: #666;
+        }
+        
+        .progress-container {
+            margin: 2rem 0;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #007bff;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .plans-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <img src="images/logo.png" alt="Gulf Wasta Logo" />
+                <h1>Gulf<span>Wasta</span></h1>
+            </div>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="clients.html">Clients</a></li>
+                    <li><a href="jobs.html">Jobs</a></li>
+                    <li><a href="apply.html">Apply</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                    <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <div class="dashboard-container">
+        <div class="welcome-banner">
+            <h2>Welcome back, <span id="userName">User</span>!</h2>
+            <p>Ready to take the next step in your career journey?</p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-sidebar">
+                <div class="user-profile">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-info">
+                        <h3 id="sidebarUserName">User Name</h3>
+                        <p id="userEmail">user@example.com</p>
+                    </div>
+                </div>
+                
+                <ul>
+                    <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> My Profile</a></li>
+                    <li><a href="#interview-prep"><i class="fas fa-graduation-cap"></i> Interview Prep</a></li>
+                    <li><a href="#mock-tests"><i class="fas fa-clipboard-check"></i> Mock Tests</a></li>
+                    <li><a href="#resume-builder"><i class="fas fa-file-alt"></i> Resume Builder</a></li>
+                    <li><a href="#subscription"><i class="fas fa-crown"></i> Subscription</a></li>
+                    <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </div>
+            
+            <div class="dashboard-main">
+                <div class="dashboard-card" id="progress-section">
+                    <h3>Your Career Progress</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 30%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>30% Complete</span>
+                            <span>Next: Complete your first mock interview</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem;">
+                        <a href="#interview-prep" class="btn btn-outline">
+                            <i class="fas fa-graduation-cap"></i> Start Learning
+                        </a>
+                        <a href="#mock-tests" class="btn btn-outline">
+                            <i class="fas fa-clipboard-check"></i> Take a Test
+                        </a>
+                        <a href="#resume-builder" class="btn btn-outline">
+                            <i class="fas fa-file-alt"></i> Build Resume
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" id="interview-prep">
+                    <h3>Interview Preparation Programs</h3>
+                    
+                    <div class="program-card">
+                        <h4>Technical Interview Mastery</h4>
+                        <p>Master data structures, algorithms, and system design concepts for tech roles.</p>
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="#" class="btn btn-primary">Start Program</a>
+                            <a href="#" class="btn btn-outline">View Curriculum</a>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card">
+                        <h4>Behavioral Interview Workshop</h4>
+                        <p>Learn how to answer common behavioral questions and showcase your soft skills.</p>
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="#" class="btn btn-primary">Start Program</a>
+                            <a href="#" class="btn btn-outline">View Curriculum</a>
+                        </div>
+                    </div>
+                    
+                    <div class="program-card">
+                        <h4>Industry-Specific Preparation</h4>
+                        <p>Tailored content for your target industry (Finance, Healthcare, Tech, etc.)</p>
+                        <div style="display: flex; gap: 1rem;">
+                            <a href="#" class="btn btn-primary">Select Industry</a>
+                            <a href="#" class="btn btn-outline">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-card" id="subscription">
+                    <h3>Upgrade Your Plan</h3>
+                    <p>Unlock premium features and accelerate your career preparation</p>
+                    
+                    <div class="plans-container">
+                        <div class="plan-card">
+                            <h4>Monthly</h4>
+                            <div class="plan-price">$15</div>
+                            <p>per month</p>
+                            <ul class="plan-features">
+                                <li>Basic Interview Prep</li>
+                                <li>3 Mock Tests/Month</li>
+                                <li>Standard Resume Templates</li>
+                                <li>Email Support</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline">Choose Plan</a>
+                        </div>
+                        
+                        <div class="plan-card popular">
+                            <div class="popular-badge">Most Popular</div>
+                            <h4>3 Months</h4>
+                            <div class="plan-price">$12</div>
+                            <p>per month ($36 billed every 3 months)</p>
+                            <ul class="plan-features">
+                                <li>All Monthly Features</li>
+                                <li>Unlimited Mock Tests</li>
+                                <li>Advanced Resume Analytics</li>
+                                <li>Priority Support</li>
+                            </ul>
+                            <a href="#" class="btn btn-primary">Choose Plan</a>
+                        </div>
+                        
+                        <div class="plan-card">
+                            <h4>6 Months</h4>
+                            <div class="plan-price">$10</div>
+                            <p>per month ($60 billed every 6 months)</p>
+                            <ul class="plan-features">
+                                <li>All 3-Month Features</li>
+                                <li>1:1 Coaching Session</li>
+                                <li>Premium Resume Templates</li>
+                                <li>24/7 Support</li>
+                            </ul>
+                            <a href="#" class="btn btn-outline">Choose Plan</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <!-- Footer columns... -->
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Gulf Wasta. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Supabase (same as your register page)
+        const supabaseUrl = 'https://durwnscjcgprhlegjhrv.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1cnduc2NqY2dwcmhsZWdqaHJ2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY0MTk3NzgsImV4cCI6MjA2MTk5NTc3OH0.b3lGJ8VWrE0zdh6HNpz5eVzQDuwSJwo9QgetjTTqH68';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Load user data
+        async function loadUserData() {
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            if (user) {
+                // Update user info in the dashboard
+                document.getElementById('userName').textContent = user.email.split('@')[0];
+                document.getElementById('sidebarUserName').textContent = user.email.split('@')[0];
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userAvatar').textContent = user.email.charAt(0).toUpperCase();
+                
+                // Load additional profile data if available
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profile && profile.name) {
+                    document.getElementById('userName').textContent = profile.name;
+                    document.getElementById('sidebarUserName').textContent = profile.name;
+                }
+            } else {
+                // Not logged in, redirect to login page
+                window.location.href = 'apply.html';
+            }
+        }
+        
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            const { error } = await supabase.auth.signOut();
+            window.location.href = 'apply.html';
+        });
+        
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUserData();
+        });
+    </script>
+</body>
+</html>
