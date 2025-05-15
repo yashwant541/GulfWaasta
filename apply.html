@@ -300,17 +300,17 @@
                 registerForm.style.display = 'none';
                 applicationForm.style.display = 'block';
                 
-                // Pre-fill application form
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('*')
-                    .eq('id', data.user.id)
-                    .single();
+                // // Pre-fill application form
+                // const { data: profile } = await supabase
+                //     .from('profiles')
+                //     .select('*')
+                //     .eq('id', data.user.id)
+                //     .single();
                 
-                if (profile) {
-                    document.getElementById('appName').value = profile.name || '';
-                    document.getElementById('appPhone').value = profile.mobile_number || '';
-                }
+                // if (profile) {
+                //     document.getElementById('appName').value = profile.name || '';
+                //     document.getElementById('appPhone').value = profile.mobile_number || '';
+                // }
                 
             } catch (error) {
                 messageEl.textContent = error.message;
